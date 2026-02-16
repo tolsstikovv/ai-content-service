@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Добавить контент{% endblock %}
+{% block content %}
+<h2>Добавить контент</h2>
+<form method="post">
+    <label>Название:<br><input type="text" name="title" required></label><br>
+    <label>Стиль изображений:<br><input type="text" name="image_style" value="modern, cyberpunk"></label><br>
+    <label>Количество изображений:<br><input type="number" name="image_count" value="1"></label><br>
+    <button type="submit">Добавить</button>
+</form>
+<a href="/projects/{{ project_id }}/content">Назад</a>
+{% endblock %}

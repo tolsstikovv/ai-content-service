@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  # -----------------------------
+  # Redis
+  # -----------------------------
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  # -----------------------------
+  # Backend API (FastAPI)
+  # -----------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    env_file:
+      - .env
+    volumes:
+      - ./app.db:/app/app.db
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+
+  # -----------------------------
+  # Celery Worker
+  # -----------------------------
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker
+    env_file:
+      - .env
+    volumes:
+      - ./app.db:/app/app.db
+    depends_on:
+      - redis
+      - backend
+    command: >
+      bash -c "export PYTHONPATH=/app &&
+               celery -A worker.celery_app.celery_app worker
+               --loglevel=info --concurrency=1"
+    restart: always
+
+  # -----------------------------
+  # Scheduler (запускает pipeline)
+  # -----------------------------
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scheduler
+    env_file:
+      - .env
+    volumes:
+      - ./app.db:/app/app.db
+    depends_on:
+      - redis
+      - worker
+    command: bash -c "export PYTHONPATH=/app && python scheduler/scheduler.py"
+    restart: always

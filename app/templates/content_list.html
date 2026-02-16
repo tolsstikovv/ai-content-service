@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Контент{% endblock %}
+
+{% block content %}
+<h2>Контент проекта: {{ project.name }}</h2>
+<a class="button" href="/projects/{{ project.id }}/content/add">Добавить контент</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Статус</th>
+        <th>Изображения</th>
+        <th>Telegram</th>
+        <th>VK</th>
+        <th>Действия</th>
+    </tr>
+
+    {% for item in content_items %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.images | length }}</td>
+
+        <!-- Статус публикации Telegram -->
+        <td>
+            {% if project.enable_telegram %}
+                <span style="color:green;">Включено</span>
+            {% else %}
+                <span style="color:red;">Выключено</span>
+            {% endif %}
+        </td>
+
+        <!-- Статус публикации VK -->
+        <td>
+            {% if project.enable_vk %}
+                <span style="color:green;">Включено</span>
+            {% else %}
+                <span style="color:red;">Выключено</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <!-- Запуск pipeline -->
+            <form style="display:inline" method="post" action="/content/{{ item.id }}/run_pipeline">
+                <button type="submit">Запустить pipeline</button>
+            </form>
+
+            <!-- QA Логи -->
+            <a class="button" href="/content/{{ item.id }}/qa_logs">QA логи</a>
+
+            <!-- Редактировать контент -->
+            <a class="button" href="/content/{{ item.id }}/edit">Редактировать</a>
+
+            <!-- Удалить контент -->
+            <form style="display:inline" method="post" action="/content/{{ item.id }}/delete">
+                <button type="submit" style="background:red;">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/projects">Назад к проектам</a>
+{% endblock %}

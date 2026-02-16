@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Проекты{% endblock %}
+{% block content %}
+<h2>Мои проекты</h2>
+<a class="button" href="/projects/add">Добавить проект</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Telegram</th>
+        <th>VK</th>
+        <th>Действия</th>
+    </tr>
+    {% for project in projects %}
+    <tr>
+        <td>{{ project.id }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ 'Да' if project.enable_telegram else 'Нет' }}</td>
+        <td>{{ 'Да' if project.enable_vk else 'Нет' }}</td>
+        <td>
+            <a class="button" href="/projects/{{ project.id }}/content">Контент</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}QA логи{% endblock %}
+{% block content %}
+<h2>QA логи статьи: {{ content_item.title }}</h2>
+<table>
+    <tr>
+        <th>Модуль</th>
+        <th>Ошибка / Сообщение</th>
+        <th>Серьезность</th>
+        <th>Время</th>
+    </tr>
+    {% for log in logs %}
+    <tr>
+        <td>{{ log.module }}</td>
+        <td>{{ log.error }}</td>
+        <td>{{ log.severity }}</td>
+        <td>{{ log.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="/projects/{{ content_item.project_id }}/content">Назад к контенту</a>
+{% endblock %}

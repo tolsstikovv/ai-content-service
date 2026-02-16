@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Добавить проект{% endblock %}
+{% block content %}
+<h2>Добавить проект</h2>
+<form method="post">
+    <label>Название:<br><input type="text" name="name" required></label><br>
+    <label>Описание:<br><textarea name="description"></textarea></label><br>
+    <label>Публикация в Telegram: <input type="checkbox" name="enable_telegram" checked></label><br>
+    <label>Публикация в VK: <input type="checkbox" name="enable_vk" checked></label><br>
+    <button type="submit">Создать проект</button>
+</form>
+<a href="/projects">Назад</a>
+{% endblock %}
