@@ -1,10 +1,6 @@
 import asyncio
 import logging
 from celery import Celery
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from app.db.session import async_session_factory
-from app.db.models import ContentItem
 from worker.tasks_generate_article import generate_article_task
 from worker.tasks_generate_image import generate_image_task
 from worker.tasks_publish_telegram import publish_telegram_task

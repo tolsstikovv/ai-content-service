@@ -106,7 +106,7 @@ def generate_article(
 
         article_text = response.choices[0].message.content.strip()
 
-        logger.success(f"[ArticleAgent] Article generated successfully")
+        logger.success("[ArticleAgent] Article generated successfully")
 
         return {
             "title": title,

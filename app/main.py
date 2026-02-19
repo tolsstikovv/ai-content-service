@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 from passlib.context import CryptContext
-from datetime import datetime
 from app.db.session import async_session_factory
 from app.models import User, Project, ContentItem, ErrorLog
 from worker.celery_app import celery_full_pipeline
