@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 from passlib.context import CryptContext
-from datetime import datetime
 from app.db.session import async_session_factory
 from app.models import User, Project, ContentItem, ErrorLog
 from worker.celery_app import celery_full_pipeline
@@ -78,8 +77,10 @@ async def logout():
 # Projects
 # ---------------------------
 @app.get("/projects")
-async def projects(request: Request, user: User = Depends(get_current_user)):
-    return templates.TemplateResponse("projects.html", {"request": request, "projects": user.projects})
+async def projects(request: Request, user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    result = await session.execute(select(Project).where(Project.user_id == user.id))
+    projects_list = result.scalars().all()
+    return templates.TemplateResponse("projects.html", {"request": request, "projects": projects_list})
 
 
 @app.get("/projects/add")
@@ -146,7 +147,9 @@ async def project_content(request: Request, project_id: int, user: User = Depend
     project = result.scalar_one_or_none()
     if not project:
         raise HTTPException(status_code=404, detail="Проект не найден")
-    return templates.TemplateResponse("content_list.html", {"request": request, "project": project, "content_items": project.content_items})
+    items_result = await session.execute(select(ContentItem).where(ContentItem.project_id == project_id))
+    content_items = items_result.scalars().all()
+    return templates.TemplateResponse("content_list.html", {"request": request, "project": project, "content_items": content_items})
 
 
 @app.get("/projects/{project_id}/content/add")

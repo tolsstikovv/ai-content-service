@@ -1,8 +1,6 @@
-import asyncio
 import logging
 from typing import Optional
 
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import async_session_factory
 from app.db.content_item_get import get_content_item_by_id

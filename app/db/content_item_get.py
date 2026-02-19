@@ -1,7 +1,6 @@
 from typing import Optional, List
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import ContentItem
 from app.db.session import async_session_factory
